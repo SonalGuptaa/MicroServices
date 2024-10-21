@@ -1,9 +1,11 @@
 package com.employeeapp.employee_service.service;
 
 import com.employeeapp.employee_service.entity.Employee;
-import com.employeeapp.employee_service.mapper.EmployeeMapper;
+
 import com.employeeapp.employee_service.repository.EmployeeRepository;
 import com.employeeapp.employee_service.dto.EmployeeDto;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -11,7 +13,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmployeeServiceImp implements EmployeeService{
 
-
+    @Autowired
+    private ModelMapper modelMapper;
     private final EmployeeRepository employeeRepository;
 
     public EmployeeServiceImp(EmployeeRepository employeeRepository) {
@@ -20,24 +23,13 @@ public class EmployeeServiceImp implements EmployeeService{
 
     @Override
     public EmployeeDto createEmployee(EmployeeDto employeeDto) {
+
         //Converting the EmployeeDto to JPA Entity
-//         Employee employee = new Employee(
-//                 employeeDto.getId(),
-//                 employeeDto.getName(),
-//                 employeeDto.getEmail(),
-//                 employeeDto.getBloodGroup()
-//         );
-         Employee employee = EmployeeMapper.mapToEmployee(employeeDto);
-         Employee savedEmployee = employeeRepository.save(employee);
+        Employee employee = modelMapper.map(employeeDto,Employee.class);
+        Employee savedEmployee = employeeRepository.save(employee);
 
          //In controller returning EmployeeDto so need to convert JPA Entity
-//        EmployeeDto saveEmployeeDto = new EmployeeDto(
-//                savedEmployee.getId(),
-//                savedEmployee.getName(),
-//                savedEmployee.getEmail(),
-//                savedEmployee.getBloodGroup()
-//        );
-        EmployeeDto saveEmployeeDto = EmployeeMapper.mapToEmployeeDto(employee);
+        EmployeeDto saveEmployeeDto = modelMapper.map(savedEmployee,EmployeeDto.class);
         return saveEmployeeDto;
     }
 
@@ -46,14 +38,9 @@ public class EmployeeServiceImp implements EmployeeService{
     public EmployeeDto getEmployeeById(Integer id) {
        Employee employee = employeeRepository.findById(id).get();
 
-       //converting JPA Employee Entitiy to EmployeeDto
-        EmployeeDto employeeDto = new EmployeeDto();
-        employeeDto.setId(employee.getId());
-        employeeDto.setName(employee.getName());
-        employeeDto.setEmail(employee.getEmail());
-        employeeDto.setBloodGroup(employee.getBloodGroup());
+       //converting JPA Employee Entitiy to EmployeeDto using ModelMapper
+       EmployeeDto employeeDto = modelMapper.map(employee,EmployeeDto.class);
 
-      // return employee;
         return employeeDto;
 
 

@@ -26,8 +26,9 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    EmployeeDto getInfoById(@PathVariable("id") Integer id)
+    ResponseEntity<EmployeeDto> getInfoById(@PathVariable("id") Integer id)
     {
-        return employeeService.getEmployeeById(id);
+        EmployeeDto employeeDto =  employeeService.getEmployeeById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(employeeDto);
     }
 }
