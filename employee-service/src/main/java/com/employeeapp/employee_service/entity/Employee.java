@@ -1,12 +1,14 @@
 package com.employeeapp.employee_service.entity;
 
 
+import com.employeeapp.employee_service.dto.AddressDto;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
 
 @Entity
 @Table(name = "employees")
@@ -21,12 +23,13 @@ public class Employee {
     private Integer id;
 
     @Column(name = "name")
-    String name;
+    private String name;
 
     @Column(name = "email")
-    String email;
+    private String email;
 
     @Column(name = "bloodgroup")
-    String bloodGroup;
+    private String bloodGroup;
+
 
 }
