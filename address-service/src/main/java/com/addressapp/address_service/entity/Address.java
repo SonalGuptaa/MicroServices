@@ -25,4 +25,8 @@ public class Address {
 
     @Column(name = "pincode")
     private Integer pincode;
+
+    @Column(name = "employee_id")
+    private Integer employeeId;
+
 }

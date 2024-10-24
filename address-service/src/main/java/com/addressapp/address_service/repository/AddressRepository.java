@@ -5,9 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface AddressRepository extends JpaRepository<Address,Integer> {
 
+    Optional<Address> findByEmployeeId(Integer employeeId);
 
-    @Query(nativeQuery = true, value = "SELECT ea.id, ea.city,ea.state,ea.pincode FROM employeeDB.address ea join employeeDB.employees e on e.id = ea.employee_id where ea.employee_id=:employeeId;")
-    Address findAddressByEmployeeId(@Param("employeeId") Integer employeeId);
+
 }

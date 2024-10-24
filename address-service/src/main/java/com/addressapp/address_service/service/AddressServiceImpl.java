@@ -7,6 +7,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class AddressServiceImpl implements  AddressService {
 
@@ -20,18 +22,30 @@ public class AddressServiceImpl implements  AddressService {
     }
 
 
-//    @Override
-//    public AddressDto createAddress(AddressDto addressDto) {
-//      return null;
-//    }
-
+    @Override
+    public AddressDto createAddress(AddressDto addressDto) {
+        Address address = modelMapper.map(addressDto,Address.class);
+        Address saveAddress = addressRepository.save(address);
+        AddressDto saveAddressDto = modelMapper.map(saveAddress,AddressDto.class);
+        return saveAddressDto;
+    }
     @Override
     public AddressDto findAddressById(Integer employeeId) {
-        Address address = addressRepository.findAddressByEmployeeId(employeeId);
-
-        AddressDto addressDto = modelMapper.map(address,AddressDto.class);
-        return addressDto;
+        Optional<Address> address = addressRepository.findByEmployeeId(employeeId);
+        if (address.isPresent()) {
+            return modelMapper.map(address.get(), AddressDto.class);
+        } else {
+            throw new RuntimeException("Address not found for employee id: " + employeeId);
+        }
     }
+
+//    @Override
+//    public AddressDto findAddressById(Integer employeeId) {
+//        Address address = addressRepository.findAddressByEmployeeId(employeeId);
+//
+//        AddressDto addressDto = modelMapper.map(address,AddressDto.class);
+//        return addressDto;
+//    }
 
 //    @Override
 //    public AddressDto findAddressById(Integer employeeId) {

@@ -15,12 +15,12 @@ public class AddressController {
     @Autowired
     private AddressServiceImpl addressService;
 
-//    @PostMapping
-//    ResponseEntity<AddressDto> saveInfo(@RequestBody AddressDto addressDto)
-//    {
-//        addressService.createAddress(addressDto);
-//        return new ResponseEntity<>(HttpStatus.CREATED);
-//    }
+    @PostMapping
+    ResponseEntity<AddressDto> saveInfo(@RequestBody AddressDto addressDto)
+    {
+        addressService.createAddress(addressDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 
     @GetMapping("/{employeeId}")
     public ResponseEntity<AddressDto>findAddressById(@PathVariable("employeeId") Integer id){

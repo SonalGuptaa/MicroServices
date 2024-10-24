@@ -1,5 +1,6 @@
 package com.addressapp.address_service.dto;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,4 +13,6 @@ public class AddressDto {
     private String city;
     private String state;
     private Integer pincode;
+    private Integer employeeId;
+  //  private Long employee_id;
 }
