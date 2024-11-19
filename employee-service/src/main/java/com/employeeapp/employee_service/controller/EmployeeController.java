@@ -22,7 +22,6 @@ public class EmployeeController {
     {
        employeeService.createEmployee(employeeDto);
        return new ResponseEntity<>(HttpStatus.CREATED);
-
     }
 
     @GetMapping("/{id}")

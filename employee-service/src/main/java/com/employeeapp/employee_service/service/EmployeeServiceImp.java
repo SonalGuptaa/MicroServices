@@ -7,10 +7,13 @@ import com.employeeapp.employee_service.repository.EmployeeRepository;
 import com.employeeapp.employee_service.dto.EmployeeDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
 public class EmployeeServiceImp implements EmployeeService{
@@ -19,12 +22,10 @@ public class EmployeeServiceImp implements EmployeeService{
     private ModelMapper modelMapper;
 
     @Autowired
-    private RestTemplate restTemplate;
-    private final EmployeeRepository employeeRepository;
+    private EmployeeRepository employeeRepository;
 
-    public EmployeeServiceImp(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
-    }
+    @Autowired
+    private WebClient webClient;
 
     @Override
     public EmployeeDto createEmployee(EmployeeDto employeeDto) {
@@ -38,21 +39,23 @@ public class EmployeeServiceImp implements EmployeeService{
         return saveEmployeeDto;
     }
 
-
     @Override
     public EmployeeDto getEmployeeById(Integer id) {
-       AddressDto addressDto = new AddressDto();
+    //   AddressDto addressDto = new AddressDto();
        Employee employee = employeeRepository.findById(id).get();
 
        //converting JPA Employee Entitiy to EmployeeDto using ModelMapper
        EmployeeDto employeeDto = modelMapper.map(employee,EmployeeDto.class);
 
-        addressDto = restTemplate.getForObject("http://localhost:8081/addresses/{id}", AddressDto.class, id);
+      //Calling Address Service using WebClient
+        AddressDto addressDto = webClient
+                                .get()
+                                .uri("/addresses/"+id)
+                                .retrieve()
+                                .bodyToMono(AddressDto.class)
+                                .block();
 
         employeeDto.setAddressDto(addressDto);
-
         return employeeDto;
-
-
     }
 }

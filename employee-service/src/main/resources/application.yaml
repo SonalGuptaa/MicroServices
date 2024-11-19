@@ -9,3 +9,4 @@ spring:
       ddl-auto: update
 server:
   port: 8082
+addressservice.base.url: http://localhost:8080

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/addresses")
 public class AddressController {
 
-
     @Autowired
     private AddressServiceImpl addressService;
 
