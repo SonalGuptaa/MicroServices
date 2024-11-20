@@ -6,7 +6,9 @@ import com.addressapp.address_service.repository.AddressRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.stream.Collectors;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,22 +37,16 @@ public class AddressServiceImpl implements  AddressService {
         if (address.isPresent()) {
             return modelMapper.map(address.get(), AddressDto.class);
         } else {
-            throw new RuntimeException("Address not found for employee id: " + employeeId);
+            return null;
         }
     }
 
-//    @Override
-//    public AddressDto findAddressById(Integer employeeId) {
-//        Address address = addressRepository.findAddressByEmployeeId(employeeId);
-//
-//        AddressDto addressDto = modelMapper.map(address,AddressDto.class);
-//        return addressDto;
-//    }
+    @Override
+    public List<AddressDto> findAllAddress() {
+        List<Address> addresses = addressRepository.findAll();
 
-//    @Override
-//    public AddressDto findAddressById(Integer employeeId) {
-//        Address address = addressRepository.findById(addressId).get();
-//        AddressDto addressDto =  modelMapper.map(address,AddressDto.class);
-//       return addressDto;
-//    }
+        return addresses.stream()
+                .map(address -> modelMapper.map(address, AddressDto.class))
+                .collect(Collectors.toList());
+    }
 }

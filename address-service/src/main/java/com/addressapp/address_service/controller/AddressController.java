@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.*;
 
 @RestController
 @RequestMapping("/addresses")
@@ -26,6 +27,13 @@ public class AddressController {
 
         AddressDto addressResponse = addressService.findAddressById(id);
         return new ResponseEntity<>(addressResponse, HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<AddressDto>> getAllAddress()
+    {
+        List<AddressDto> addressDtos=addressService.findAllAddress();
+        return new ResponseEntity<>(addressDtos,HttpStatus.OK);
     }
 
 
